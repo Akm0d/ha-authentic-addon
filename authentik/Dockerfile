@@ -65,7 +65,7 @@ COPY --from=authentik-source /pyproject.toml /pyproject.toml
 # Build-time integration smoke test: catch missing native runtime libraries
 # before the add-on image is published or upgraded. This caught the original
 # libxmlsec1.so.10312 import failure.
-RUN /ak-root/.venv/bin/python -c 'import xmlsec; from xmlsec import base64_default_line_size; print("xmlsec runtime OK")'
+RUN PYTHONPATH=/ /ak-root/.venv/bin/python -c 'import xmlsec; from authentik.root.setup import setup; setup(); print("authentik Python startup imports OK")'
 
 # ── Create authentik user (uid 1000, matching the upstream image) ─────────────
 RUN groupadd --gid 1000 authentik && \
