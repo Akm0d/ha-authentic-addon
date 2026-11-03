@@ -1,35 +1,40 @@
-# Authentik for Home Assistant
+# Authentik Home Assistant Add-on
 
-A focused, community-maintained **Authentik** Home Assistant add-on repository, forked from [akentner/homeassistant-addons](https://github.com/akentner/homeassistant-addons).
+A Home Assistant add-on for [Authentik](https://goauthentik.io/), a self-hosted identity provider supporting OAuth2/OIDC, SAML, LDAP, and more.
 
-This fork packages **only Authentik**; unrelated upstream add-ons and multi-add-on automation have been excluded. Upstream Authentik source: https://github.com/goauthentik/authentik.
+## Features
+
+- Authentik server and background worker
+- Bundled PostgreSQL 17; no external database or Valkey required
+- Persistent add-on data in `/data`
+- Web UI and OIDC endpoints on port `9000` (not Home Assistant ingress)
+- Installation, configuration, logs, backups, and updates through Home Assistant Supervisor
+- Automatic upstream Authentik release tracking with reviewable update PRs
 
 ## Status
 
-**Packaging validation in progress. Not yet validated for production identity-provider use.**
+The add-on is under runtime validation. Docker builds passing CI do not yet establish successful first boot, identity-provider operation, or tested backup/restore.
 
-- Bundled Authentik server/worker, PostgreSQL and Valkey
-- Persistent add-on data under `/data`
-- UI/API on host-mapped port `9000` (not Home Assistant ingress)
-- Currently only `amd64`, matching the inherited build
-- Manual boot remains enabled until startup, backup and upgrade tests pass
+- Supported architecture: `amd64`
+- Upstream Authentik version: `2026.8.5`
+- Automatic boot remains disabled pending runtime validation
 
-[Add-on configuration and recovery notes](authentik/DOCS.md) · [Packaging source](authentik/) · [Original repository](https://github.com/akentner/homeassistant-addons)
+## Installation
 
-## Installation (after validation)
+1. Add `https://github.com/Akm0d/ha-authentic-addon` to the Home Assistant add-on repositories.
+2. Install **Authentik** from the add-on store.
+3. Configure and start the add-on from Home Assistant.
+4. Access the web UI through port `9000`. An **Open Web UI** button is being added as part of the next packaging revision.
+5. Before configuring SSO clients, set up a stable HTTPS URL for Authentik that does not depend on an existing Home Assistant session.
 
-Add `https://github.com/Akm0d/ha-authentic-addon` as a custom repository in **Home Assistant → Settings → Add-ons → Add-on Store**, then install Authentik. Verify that the Home Assistant host architecture is `amd64` first.
+See [configuration and recovery documentation](authentik/DOCS.md).
 
-Configure a stable HTTPS hostname for the identity provider and preserve native Home Assistant sign-in as a break-glass method. Do not depend on Authentik for restoring its own credentials.
+## Releases
 
-## Release policy
+The repository checks for new stable Authentik releases every six hours and proposes updates as pull requests. Container images are rebuilt for upstream changes; newer Debian packages are resolved at build time, not installed into running containers.
 
-Upstream Authentik versions are checked automatically every six hours. New versions open a reviewable PR and run build validation; an upstream release does not automatically deploy to Home Assistant. Rebuilds refresh Debian `apt` packages at build time, not in running containers. An independent dependency-refresh policy is still needed for periods without upstream Authentik releases.
+New Authentik versions are **not automatically deployed**. Database compatibility, major release sequencing, backup and restore, and login/OIDC behavior must be validated before deployment.
 
-Do not merge or auto-install new Authentik versions solely because a newer upstream image exists. Major migrations and PostgreSQL compatibility require explicit verification and a tested off-host backup.
+## License
 
-The next work items are release-PR automation, startup/health checks, backup-and-restore testing, and an explicit upgrade gate. Unrelated Windows/LDAP/domain-controller work is out of scope.
-
-## Attribution and license
-
-Fork of akentner's Home Assistant add-on packaging. Retain the original [Apache-2.0 LICENSE](LICENSE). Authentik itself has its own upstream licensing.
+Add-on packaging is distributed under the [Apache License 2.0](LICENSE). Authentik itself is a separate project with its own licensing.
