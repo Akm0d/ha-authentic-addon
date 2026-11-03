@@ -1,3 +1,10 @@
+## 2026.8.5-3 — Restore XMLSec runtime ABI compatibility
+
+- Include Authentik's upstream-built XMLSec shared libraries alongside its Python runtime.
+- Fail the Docker image build if Python cannot import its xmlsec extension.
+- Fix the first-boot `ImportError: libxmlsec1.so.10312` regression.
+- PostgreSQL schema and Authentik upstream version remain unchanged.
+
 ## 2026.8.5-2 — PostgreSQL startup fix
 
 - Write the PostgreSQL startup log under its postgres-owned data directory instead of at the root of the Home Assistant add-on storage mount.
