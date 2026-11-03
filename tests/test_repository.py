@@ -11,7 +11,7 @@ class AuthentikRepositoryTest(unittest.TestCase):
         assert (ADDON / "config.yaml").is_file()
         other_addons = [
             p.name for p in ROOT.iterdir()
-            if p.is_dir() and p.name not in {"authentik", ".github", "tests"}
+            if p.is_dir() and p.name not in {"authentik", ".github", ".git", "tests"}
         ]
         self.assertEqual(other_addons, [])
 
