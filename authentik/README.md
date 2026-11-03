@@ -21,8 +21,9 @@ This add-on bundles PostgreSQL inside the container — no external database add
 
 ## Important Notes
 
-**Direct port access required.** Authentik is not served through HA Ingress because OAuth2/OIDC flows require stable
-callback URLs. Access the web interface via `http://<ha-ip>:9000`.
+**Open Web UI:** The Home Assistant add-on page provides an **Open Web UI** button that launches Authentik at
+`http://<ha-ip>:9000` in a browser page. It does not embed Authentik via HA ingress: OAuth2/OIDC flows require
+independent, stable URLs. All add-on lifecycle management remains within Home Assistant.
 
 **Set a stable external URL in authentik** after first login: _System → Settings → Authentik Settings → "Authentik
 URL"_. This is required for OAuth2 redirects to work correctly.
