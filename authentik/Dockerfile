@@ -13,7 +13,7 @@ ARG VERSION
 # System dependencies: PostgreSQL and shared libraries
 # Python 3.14 runtime is copied from stage 1 — no Python apt package needed
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    postgresql \
+    postgresql-17 \
     curl \
     jq \
     bash \
