@@ -36,6 +36,12 @@ class AuthentikRepositoryTest(unittest.TestCase):
         self.assertNotIn("authentik_redis__", runtime)
         self.assertNotIn("| Valkey ", docs)
 
+    def test_upstream_xmlsec_native_dependencies(self):
+        docker = (ADDON / "Dockerfile").read_text(encoding="utf-8")
+        self.assertIn("COPY --from=authentik-source /usr/local/lib/libxmlsec1.so*", docker)
+        self.assertIn("COPY --from=authentik-source /usr/local/lib/libxmlsec1-openssl.so*", docker)
+        self.assertIn("from xmlsec import base64_default_line_size", docker)
+
     def test_postgresql_log_uses_owned_directory(self):
         runtime = (ADDON / "run.sh").read_text(encoding="utf-8")
         docs = (ADDON / "DOCS.md").read_text(encoding="utf-8")
