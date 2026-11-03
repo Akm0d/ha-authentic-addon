@@ -1,3 +1,10 @@
+## 2026.8.5-1 — packaging only
+
+- Remove the obsolete Valkey/Redis installation, startup, and environment settings.
+- Keep bundled PostgreSQL and Authentik server/worker; Authentik remains at 2026.8.5.
+- Update fork image metadata and documentation.
+- Add upstream-release tracking with human-reviewed version updates.
+
 See https://docs.goauthentik.io/docs/releases/2026.8#fixed-in-202685
 
 ## What's Changed
