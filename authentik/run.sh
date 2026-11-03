@@ -60,18 +60,7 @@ su -s /bin/bash postgres \
     su -s /bin/bash postgres -c "psql -h 127.0.0.1 -c \"CREATE DATABASE authentik OWNER authentik;\""
 }
 
-# ── Valkey (Redis-compatible) ─────────────────────────────────────────────────
-bashio::log.info "Starting Valkey..."
-valkey-server --daemonize yes --save "" --loglevel warning --bind 127.0.0.1
-
-until valkey-cli -h 127.0.0.1 ping 2>/dev/null | grep -q PONG; do
-    sleep 1
-done
-bashio::log.info "Valkey ready."
-
 # ── Authentik environment variables ──────────────────────────────────────────
-export AUTHENTIK_REDIS__HOST=127.0.0.1
-export AUTHENTIK_REDIS__PORT=6379
 export AUTHENTIK_POSTGRESQL__HOST=127.0.0.1
 export AUTHENTIK_POSTGRESQL__PORT=5432
 export AUTHENTIK_POSTGRESQL__NAME=authentik
