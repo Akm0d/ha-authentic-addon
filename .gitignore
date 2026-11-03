@@ -1,43 +1,5 @@
-# env file
 .env
-
-# Python virtualenvs (transient dev envs from pre-commit work)
-.venv-precommit*/
+*.local
 .venv/
-
-# Editor/IDE
-.idea/
-.vscode/
-
-# Claude Code local state
-.claude/*
-!.claude/hooks/
-!.claude/commands/
-
-# GSD transient runtime state (dispatch sentinel, milestone lock)
-.gsd/
-.planning/milestone.lock
-
-# AI agent state (skill installations, agent memory, run-continuation)
-.agents/
-.omo/
-skills-lock.json
-
-# Python bytecode caches
 **/__pycache__/
-
-# GSD research artifacts
-internal/__pycache__/
-markdown-renderer/__pycache__/
-
-# Go build artifacts (terraform-provider-homeassistant/ compiles a binary named
-# after the module; same pattern would apply to any future Go module under the repo)
-terraform-provider-homeassistant/terraform-provider-homeassistant
-*.test
-*.out
-
-# Very-early / idea-stage projects — not runnable, kept locally only
-info_hub/
-
-# zigbee2mqtt MCP runtime DB (created by zigbee2mqtt-mcp on first scan, regenerated)
-zigbee2mqtt.db
+.DS_Store
