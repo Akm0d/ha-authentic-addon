@@ -26,6 +26,15 @@ class AuthentikRepositoryTest(unittest.TestCase):
         self.assertIn("ghcr.io/goauthentik/server:${VERSION}", docker)
         self.assertIn("slug: \"authentik\"", manifest)
 
+    def test_removed_redis_and_valkey(self):
+        docker = (ADDON / "Dockerfile").read_text(encoding="utf-8").lower()
+        runtime = (ADDON / "run.sh").read_text(encoding="utf-8").lower()
+        docs = (ADDON / "DOCS.md").read_text(encoding="utf-8")
+        self.assertNotIn("    valkey ", docker)
+        self.assertNotIn("valkey-server", runtime)
+        self.assertNotIn("authentik_redis__", runtime)
+        self.assertNotIn("| Valkey ", docs)
+
     def test_origin_and_scope(self):
         manifest = (ADDON / "config.yaml").read_text()
         repository = (ROOT / "repository.yaml").read_text()
