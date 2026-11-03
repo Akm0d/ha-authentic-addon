@@ -40,7 +40,7 @@ class AuthentikRepositoryTest(unittest.TestCase):
         docker = (ADDON / "Dockerfile").read_text(encoding="utf-8")
         self.assertIn("COPY --from=authentik-source /usr/local/lib/libxmlsec1.so*", docker)
         self.assertIn("COPY --from=authentik-source /usr/local/lib/libxmlsec1-openssl.so*", docker)
-        self.assertIn("from xmlsec import base64_default_line_size", docker)
+        self.assertIn("from authentik.root.setup import setup; setup()", docker)
 
     def test_postgresql_log_uses_owned_directory(self):
         runtime = (ADDON / "run.sh").read_text(encoding="utf-8")
