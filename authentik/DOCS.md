@@ -40,7 +40,7 @@ All data is stored in the HA add-on persistent storage directory (mapped to `/da
 | Path                   | Contents                            |
 | ---------------------- | ----------------------------------- |
 | `/data/postgresql/`    | PostgreSQL database files           |
-| `/data/postgresql.log` | PostgreSQL log file                 |
+| `/data/postgresql/postgresql.log` | PostgreSQL log file (owned by the PostgreSQL user) |
 | `/data/.pg_password`   | Auto-generated database password    |
 | `/data/.secret_key`    | Auto-generated authentik secret key |
 
@@ -51,6 +51,19 @@ remain stable across restarts. Losing the secret key invalidates all tokens and 
 
 The `/addon_config` directory (mapped from HA add-on config storage) is available inside the container. Use it to
 provide custom blueprints or other authentik configuration files as needed.
+
+## Home Assistant management and Open Web UI
+
+The add-on is managed by Home Assistant Supervisor: install/update, start/stop,
+logs, configuration, and backups are available from the add-on page.
+
+The **Open Web UI** button uses the native Home Assistant `webui` field to open
+`http://[HOST]:[PORT:9000]` in a separate browser page. This does **not** use
+Home Assistant ingress, and Authentik handles its own authentication.
+
+Port 9000 is mapped on Hearth to serve Authentik's standard HTTP endpoint.
+Use a stable HTTPS reverse-proxy/Tailscale hostname as the OIDC issuer once SSO is configured.
+Do not use Home Assistant ingress URLs as the Authentik issuer or callback target.
 
 ## Reverse Proxy Setup
 

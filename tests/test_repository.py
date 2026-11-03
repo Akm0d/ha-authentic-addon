@@ -36,6 +36,14 @@ class AuthentikRepositoryTest(unittest.TestCase):
         self.assertNotIn("authentik_redis__", runtime)
         self.assertNotIn("| Valkey ", docs)
 
+    def test_postgresql_log_uses_owned_directory(self):
+        runtime = (ADDON / "run.sh").read_text(encoding="utf-8")
+        docs = (ADDON / "DOCS.md").read_text(encoding="utf-8")
+        self.assertIn('chown postgres:postgres "${PG_DATA}"', runtime)
+        self.assertIn('-l ${PG_DATA}/postgresql.log start', runtime)
+        self.assertNotIn("-l /data/postgresql.log start", runtime)
+        self.assertIn("/data/postgresql/postgresql.log", docs)
+
     def test_origin_and_scope(self):
         manifest = (ADDON / "config.yaml").read_text()
         repository = (ROOT / "repository.yaml").read_text()
@@ -44,6 +52,7 @@ class AuthentikRepositoryTest(unittest.TestCase):
         self.assertIn("  - amd64", manifest)
         self.assertIn('boot: "manual"', manifest)
         self.assertIn("9000/tcp: 9000", manifest)
+        self.assertIn('webui: "http://[HOST]:[PORT:9000]"', manifest)
         self.assertNotIn("ingress: true", manifest)
 
 

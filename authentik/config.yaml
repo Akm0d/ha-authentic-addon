@@ -1,6 +1,6 @@
 name: "Authentik"
 description: "Open-source Identity Provider — SSO, OAuth2, LDAP and more"
-version: "2026.8.5-1"
+version: "2026.8.5-2"
 slug: "authentik"
 init: false
 arch:
@@ -10,6 +10,7 @@ url: "https://github.com/Akm0d/ha-authentic-addon"
 startup: "application"
 boot: "manual"
 host_network: false
+webui: "http://[HOST]:[PORT:9000]"
 ports:
   9000/tcp: 9000
 ports_description:
