@@ -27,6 +27,12 @@ This add-on runs PostgreSQL and Authentik (server and background worker in all-i
 PostgreSQL is only bound to loopback inside the add-on and is not exposed on a host port.
 Authentik 2025.10 and later use PostgreSQL for caching and task coordination; no Valkey/Redis is needed.
 
+The Dockerfile installs Debian Trixie's `postgresql-17`, rather than the
+unversioned `postgresql` meta-package. Rebuilds can pick up PostgreSQL 17
+security/patch updates but cannot automatically upgrade to PostgreSQL 18.
+Startup explicitly rejects an incompatible persisted major version.
+Major PostgreSQL upgrades require a separately planned database migration.
+
 ## Persistent Data
 
 All data is stored in the HA add-on persistent storage directory (mapped to `/data` in the container):
