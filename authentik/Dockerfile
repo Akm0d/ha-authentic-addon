@@ -37,6 +37,13 @@ COPY --from=authentik-source /usr/local/lib/libpython3.14.so /usr/local/lib/libp
 COPY --from=authentik-source /usr/local/lib/libpython3.so /usr/local/lib/libpython3.so
 COPY --from=authentik-source /usr/local/lib/python3.14 /usr/local/lib/python3.14
 
+# Authentik's xmlsec Python extension is built against upstream's custom
+# XMLSec 1.3.x libraries. Debian's libxmlsec1 packages may have different
+# SONAMEs and are not interchangeable. Copy the ABI-matched libraries from
+# the exact same upstream image as the Python extension.
+COPY --from=authentik-source /usr/local/lib/libxmlsec1.so* /usr/local/lib/
+COPY --from=authentik-source /usr/local/lib/libxmlsec1-openssl.so* /usr/local/lib/
+
 # Register copied shared library so the dynamic linker finds it
 RUN ldconfig
 
@@ -53,6 +60,11 @@ COPY --from=authentik-source /locale /locale
 COPY --from=authentik-source /geoip /geoip
 COPY --from=authentik-source /manage.py /manage.py
 COPY --from=authentik-source /pyproject.toml /pyproject.toml
+
+# Build-time integration smoke test: catch missing native runtime libraries
+# before the add-on image is published or upgraded. This caught the original
+# libxmlsec1.so.10312 import failure.
+RUN /ak-root/.venv/bin/python -c 'import xmlsec; from xmlsec import base64_default_line_size; print("xmlsec runtime OK")'
 
 # ── Create authentik user (uid 1000, matching the upstream image) ─────────────
 RUN groupadd --gid 1000 authentik && \
