@@ -40,7 +40,7 @@ All data is stored in the HA add-on persistent storage directory (mapped to `/da
 | Path                   | Contents                            |
 | ---------------------- | ----------------------------------- |
 | `/data/postgresql/`    | PostgreSQL database files           |
-| `/data/postgresql.log` | PostgreSQL log file                 |
+| `/data/postgresql/postgresql.log` | PostgreSQL log file (owned by the PostgreSQL user) |
 | `/data/.pg_password`   | Auto-generated database password    |
 | `/data/.secret_key`    | Auto-generated authentik secret key |
 
