@@ -37,6 +37,14 @@ PG_DATA="/data/postgresql"
 mkdir -p "${PG_DATA}"
 chown postgres:postgres "${PG_DATA}"
 
+if [ -f "${PG_DATA}/PG_VERSION" ]; then
+    DATA_PG_VERSION=$(cat "${PG_DATA}/PG_VERSION")
+    if [ "${DATA_PG_VERSION}" != "${PG_VERSION}" ]; then
+        bashio::log.error "PostgreSQL data requires major ${DATA_PG_VERSION} but this add-on has ${PG_VERSION}; restore a compatible image or perform an explicit database upgrade."
+        exit 1
+    fi
+fi
+
 if [ ! -f "${PG_DATA}/PG_VERSION" ]; then
     bashio::log.info "Initializing PostgreSQL ${PG_VERSION} database..."
     su -s /bin/bash postgres -c "${PG_BIN}/initdb -D ${PG_DATA} --encoding=UTF8 --locale=C"
@@ -60,18 +68,7 @@ su -s /bin/bash postgres \
     su -s /bin/bash postgres -c "psql -h 127.0.0.1 -c \"CREATE DATABASE authentik OWNER authentik;\""
 }
 
-# ── Valkey (Redis-compatible) ─────────────────────────────────────────────────
-bashio::log.info "Starting Valkey..."
-valkey-server --daemonize yes --save "" --loglevel warning --bind 127.0.0.1
-
-until valkey-cli -h 127.0.0.1 ping 2>/dev/null | grep -q PONG; do
-    sleep 1
-done
-bashio::log.info "Valkey ready."
-
 # ── Authentik environment variables ──────────────────────────────────────────
-export AUTHENTIK_REDIS__HOST=127.0.0.1
-export AUTHENTIK_REDIS__PORT=6379
 export AUTHENTIK_POSTGRESQL__HOST=127.0.0.1
 export AUTHENTIK_POSTGRESQL__PORT=5432
 export AUTHENTIK_POSTGRESQL__NAME=authentik

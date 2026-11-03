@@ -11,7 +11,7 @@ class AuthentikRepositoryTest(unittest.TestCase):
         assert (ADDON / "config.yaml").is_file()
         other_addons = [
             p.name for p in ROOT.iterdir()
-            if p.is_dir() and p.name not in {"authentik", ".github", ".git", "tests"}
+            if p.is_dir() and p.name not in {"authentik", ".github", ".git", "tests", "scripts"}
         ]
         self.assertEqual(other_addons, [])
 
@@ -24,7 +24,17 @@ class AuthentikRepositoryTest(unittest.TestCase):
         version = match.group(1)
         self.assertRegex(manifest, r'(?m)^version: "' + re.escape(version) + r'-[0-9]+"$')
         self.assertIn("ghcr.io/goauthentik/server:${VERSION}", docker)
+        self.assertIn("postgresql-17", docker)
         self.assertIn("slug: \"authentik\"", manifest)
+
+    def test_removed_redis_and_valkey(self):
+        docker = (ADDON / "Dockerfile").read_text(encoding="utf-8").lower()
+        runtime = (ADDON / "run.sh").read_text(encoding="utf-8").lower()
+        docs = (ADDON / "DOCS.md").read_text(encoding="utf-8")
+        self.assertNotIn("    valkey ", docker)
+        self.assertNotIn("valkey-server", runtime)
+        self.assertNotIn("authentik_redis__", runtime)
+        self.assertNotIn("| Valkey ", docs)
 
     def test_origin_and_scope(self):
         manifest = (ADDON / "config.yaml").read_text()

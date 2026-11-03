@@ -9,15 +9,14 @@ Open-source Identity Provider — SSO, OAuth2/OIDC, LDAP, SAML, and more.
 [Authentik][authentik] is a self-hosted identity provider that supports modern authentication standards. Use it as a
 central SSO hub for Home Assistant, Grafana, Nextcloud, or any OAuth2/OIDC-compatible service.
 
-This add-on bundles PostgreSQL and Valkey (Redis-compatible) inside the container — no external database add-ons
-required. Data is persisted in the HA add-on storage directory.
+This add-on bundles PostgreSQL inside the container — no external database add-on is required. Data is persisted in the HA add-on storage directory.
 
 ## Features
 
 - SSO via OAuth2 / OIDC / SAML / LDAP / SCIM
 - Built-in user management and group policies
 - Flow engine for custom authentication logic (MFA, enrollment, recovery)
-- Bundled PostgreSQL and Valkey — no external dependencies
+- Bundled PostgreSQL — no external database add-on required
 - Data persistence across restarts via HA add-on storage
 
 ## Important Notes

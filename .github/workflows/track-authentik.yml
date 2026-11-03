@@ -1,0 +1,62 @@
+name: Track upstream Authentik releases
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: authentik-upstream-release-tracking
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Prepare next stable upstream release
+        id: upstream
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/check_upstream.py
+      - name: Open an update PR and dispatch build validation
+        if: steps.upstream.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.upstream.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="auto/authentik-${VERSION//./-}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "Existing update branch $branch; no duplicate PR."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add authentik/build.yaml authentik/config.yaml authentik/README.md authentik/CHANGELOG.md
+          git commit -m "chore: track authentik $VERSION"
+          git push origin "$branch"
+
+          gh pr create --base main --head "$branch" \
+            --title "chore: update Authentik to $VERSION" \
+            --body "Automated upstream release proposal for Authentik $VERSION.
+
+          This PR bumps upstream Authentik only; the packaging revision resets to -0.
+          Verify the official release notes, PostgreSQL and runtime compatibility,
+          sequential release-train upgrades, persistent data backup and a live
+          login/OIDC smoke test before merging or deploying. No automatic installation."
+
+          # Workflow-created PRs do not themselves trigger ordinary pull_request
+          # workflows with GITHUB_TOKEN. Dispatch validation explicitly.
+          gh workflow run validate-authentik.yml --ref "$branch"

@@ -2,6 +2,7 @@ name: Validate Authentik add-on
 
 on:
   pull_request:
+  workflow_dispatch:
   push:
     branches: [main]
 

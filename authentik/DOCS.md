@@ -16,16 +16,22 @@
 
 ## Bundled Services
 
-This add-on runs three processes inside a single container:
+This add-on runs PostgreSQL and Authentik (server and background worker in all-in-one mode) inside a single container:
 
 | Service          | Description                                   | Port             |
 | ---------------- | --------------------------------------------- | ---------------- |
 | PostgreSQL       | Relational database for authentik data        | `127.0.0.1:5432` |
-| Valkey           | Redis-compatible store for sessions and cache | `127.0.0.1:6379` |
 | Authentik server | Web UI, REST API, SSO flows                   | `0.0.0.0:9000`   |
 | Authentik worker | Background tasks, email delivery, scheduling  | _(internal)_     |
 
-Neither PostgreSQL nor Valkey are reachable from outside the container.
+PostgreSQL is only bound to loopback inside the add-on and is not exposed on a host port.
+Authentik 2025.10 and later use PostgreSQL for caching and task coordination; no Valkey/Redis is needed.
+
+The Dockerfile installs Debian Trixie's `postgresql-17`, rather than the
+unversioned `postgresql` meta-package. Rebuilds can pick up PostgreSQL 17
+security/patch updates but cannot automatically upgrade to PostgreSQL 18.
+Startup explicitly rejects an incompatible persisted major version.
+Major PostgreSQL upgrades require a separately planned database migration.
 
 ## Persistent Data
 
