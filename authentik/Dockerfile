@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     libssl3 \
     libffi8 \
+    libltdl7 \
     libxml2 \
     libxslt1.1 \
     && rm -rf /var/lib/apt/lists/*
