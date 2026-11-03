@@ -52,6 +52,7 @@ class AuthentikRepositoryTest(unittest.TestCase):
         self.assertIn("  - amd64", manifest)
         self.assertIn('boot: "manual"', manifest)
         self.assertIn("9000/tcp: 9000", manifest)
+        self.assertIn('webui: "http://[HOST]:[PORT:9000]"', manifest)
         self.assertNotIn("ingress: true", manifest)
 
 
