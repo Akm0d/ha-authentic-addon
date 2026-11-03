@@ -24,6 +24,7 @@ class AuthentikRepositoryTest(unittest.TestCase):
         version = match.group(1)
         self.assertRegex(manifest, r'(?m)^version: "' + re.escape(version) + r'-[0-9]+"$')
         self.assertIn("ghcr.io/goauthentik/server:${VERSION}", docker)
+        self.assertIn("postgresql-17", docker)
         self.assertIn("slug: \"authentik\"", manifest)
 
     def test_removed_redis_and_valkey(self):
