@@ -24,6 +24,8 @@ Configure a stable HTTPS hostname for the identity provider and preserve native 
 
 ## Release policy
 
+Upstream Authentik versions are checked automatically every six hours. New versions open a reviewable PR and run build validation; an upstream release does not automatically deploy to Hearth. Rebuilds refresh Debian `apt` packages at build time, not in running containers. An independent dependency-refresh policy is still needed for periods without upstream Authentik releases.
+
 Do not merge or auto-install new Authentik versions solely because a newer upstream image exists. Major migrations and PostgreSQL compatibility require explicit verification and a tested off-host backup.
 
 The next work items are release-PR automation, startup/health checks, backup-and-restore testing, and an explicit upgrade gate. Unrelated Windows/LDAP/domain-controller work is out of scope.
