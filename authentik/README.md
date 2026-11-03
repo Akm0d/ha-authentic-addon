@@ -43,8 +43,8 @@ production use.
 See [DOCS.md][docs] for all configuration options.
 
 [authentik]: https://goauthentik.io
-[docs]: https://github.com/akentner/homeassistant-addons/blob/main/authentik/DOCS.md
+[docs]: https://github.com/Akm0d/ha-authentic-addon/blob/main/authentik/DOCS.md
 [release-shield]: https://img.shields.io/badge/version-v2026.8.5-blue.svg
-[release]: https://github.com/goauthentik/authentik/releases/tag/version%2F2026.5.3
+[release]: https://github.com/goauthentik/authentik/releases/tag/version%2F2026.8.5
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-orange.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg

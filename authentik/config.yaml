@@ -6,7 +6,7 @@ init: false
 arch:
   - amd64
   # - aarch64
-url: "https://github.com/akentner/homeassistant-addons"
+url: "https://github.com/Akm0d/ha-authentic-addon"
 startup: "application"
 boot: "manual"
 host_network: false
