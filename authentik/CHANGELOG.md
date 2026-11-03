@@ -1,3 +1,9 @@
+## 2026.8.5-2 — PostgreSQL startup fix
+
+- Write the PostgreSQL startup log under its postgres-owned data directory instead of at the root of the Home Assistant add-on storage mount.
+- Fixes `cannot create /data/postgresql.log: Permission denied` on first boot.
+- No changes to database files, credentials, or the Authentik upstream version.
+
 ## 2026.8.5-1 — packaging only
 
 - Remove the obsolete Valkey/Redis installation, startup, and environment settings.
