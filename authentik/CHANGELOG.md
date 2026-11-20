@@ -1,3 +1,9 @@
+## 2026.8.6-0 — upstream Authentik release
+
+- Update upstream Authentik from 2026.8.5 to 2026.8.6.
+- Review upstream release notes and database upgrade sequence before deployment:
+  https://github.com/goauthentik/authentik/releases/tag/version%2F2026.8.6
+
 ## 2026.8.5-3 — Restore XMLSec runtime ABI compatibility
 
 - Include Authentik's upstream-built XMLSec shared libraries alongside its Python runtime.
